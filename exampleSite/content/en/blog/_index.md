@@ -1,40 +1,33 @@
 ---
 title: Blog
 description: Blog list page
-blogHeaderType: img
+blogHeaderType: text
+headerHeight: 112
 header:
   - type: text
-    height: 200
-    paddingX: 50
-    align: center
-    title:
-      - Blog
-    subtitle: 
-      - 
-      - 
-    titleColor: 
-    titleFontSize: 44
-    subtitleColor: 
-    subtitleFontSize: 20
-    spaceBetweenTitleSubtitle: 16
-  
-  - type: img
-    imageSrc: images/header/background.jpg
-    imageSize: cover
-    imageRepeat: no-repeat
-    imagePosition: center
-    height: 280
     paddingX: 50
     paddingY: 0
     align: center
     title:
-      - Zzo blog
+      - Blog
     subtitle:
       - 
-    titleColor: 
+    spaceBetweenTitleSubtitle: 0
+  
+  - type: img
+    imageSrc: images/header/background.png
+    imageSize: initial
+    imageRepeat: no-repeat
+    imagePosition: center
+    height: 170
+    paddingX: 50
+    paddingY: 0
+    align: center
+    title:
+      - 
+    subtitle:
+      - 
     titleShadow: true
-    titleFontSize: 44
-    subtitleColor:
-    subtitleFontSize: 16
+    subtitleCursive: true
     spaceBetweenTitleSubtitle: 20
 ---

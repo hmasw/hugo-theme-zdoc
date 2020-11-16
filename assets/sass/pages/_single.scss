@@ -1,5 +1,13 @@
 #single-menu {
-  position: relative;
+  @include themify($themes) {
+    &[data-dir="ltr"] {
+      border-right: 1px solid themed('border-line-color');
+    }
+
+    &[data-dir="rtl"] {
+      border-left: 1px solid themed('border-line-color');
+    }
+  }
 }
 
 .single {
@@ -57,8 +65,8 @@
       overflow: hidden;
     }
 
-    & > p {
-      margin: 0 0 1rem 0;
+    & > p > a {
+      text-decoration: underline;
     }
 
     margin: 1rem 0;
@@ -135,13 +143,10 @@
 
       @include themify($themes) {
         border-top: 1px solid themed('border-line-color');
+        border-bottom: 1px solid themed('border-line-color');
 
         @include webkit-scrollbars(themed('custom-scrollbar-foreground-color'), themed('custom-scrollbar-background-color'));
         @include moz-scrollbars(themed('custom-scrollbar-foreground-color'), themed('custom-scrollbar-background-color'));
-      }
-
-      @include themify($codeblock) {
-        background-color: themed('content-pre-background-color');
       }
     }
 
@@ -150,7 +155,7 @@
       margin: 1rem 0;
 
       @include themify($codeblock) {
-        border: 1px solid themed('content-pre-border-background-color');
+        border-left: 4px solid themed('content-pre-border-background-color');
       }
     }
 
@@ -168,7 +173,6 @@
       padding: 0.25rem 0.5rem;
       @include themify($codeblock) {
         color: themed('content-code-color');
-        background-color: themed('content-code-background-color');
       }
     }
 
@@ -183,18 +187,12 @@
       position: relative;
       
       @include themify($themes) {
-        border-left: 5px solid themed("single-blockquote-border-color");
+          border-left: 5px solid themed("single-blockquote-border-color");
       }
 
       code:not([class^=language]) {
         padding: 3px 7px;
         margin: 0 0.25rem;
-        @include themify($codeblock) {
-          color: themed('content-code-in-pre-color');
-        }
-      }
-
-      p > code:not([class^=language]) {
         @include themify($codeblock) {
           color: themed('content-code-color');
         }
@@ -208,6 +206,7 @@
     }
 
     p {
+      margin: 0 0 10px 0;
       padding: 0 1rem;      
 
       code:not([class^=language]) {
@@ -233,37 +232,22 @@
 
     &[data-dir="ltr"] {
       li {
-        margin-left: 3rem;
+        margin-left: 2rem;
       }
     }
 
     &[data-dir="rtl"] {
       li {
-        margin-right: 3rem;
+        margin-right: 2rem;
       }
     }
 
     li {
       & > code {
         padding: 2px 7px;
-
-        @include themify($codeblock) {
-          color: themed('content-code-color') !important;
-          background-color: themed('content-code-background-color');
-        }
-      }
-
-      & > p {
-        padding: 0 0.4rem;
       }
 
       code:not([class^=language]) {
-        @include themify($codeblock) {
-          color: themed('content-code-in-pre-color');
-        }
-      }
-      
-      p > code:not([class^=language]) {
         @include themify($codeblock) {
           color: themed('content-code-color');
         }
@@ -322,17 +306,12 @@
           }
 
           th {
-            color: themed('content-pre-header-color');
+            color: themed('content-pre-header-color');            
           }
 
           th, td {
             padding: 0.25rem 0.5rem;
             border: 1px double themed('content-pre-border-background-color');
-
-            code {
-              color: themed('content-code-color') !important;
-              background-color: themed('content-code-background-color');
-            }
           }
         }
       }
@@ -340,12 +319,6 @@
       code:not([class^=language]) {
         padding: 3px 7px;
         margin: 0 0.25rem;
-        @include themify($codeblock) {
-          color: themed('content-code-in-pre-color');
-        }
-      }
-
-      p > code:not([class^=language]) {
         @include themify($codeblock) {
           color: themed('content-code-color');
         }
@@ -367,7 +340,7 @@
 }
 
 code, pre {
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 0.5rem;
   line-height: 1.5;
   font-family: $code-font-stack;
   overflow: auto;
@@ -379,6 +352,9 @@ code, pre {
 
 pre.chroma {
   padding: 0.65rem 0;
+  -moz-tab-size : 2 !important;
+  -o-tab-size : 2 !important;
+     tab-size : 2 !important;
 }
 
 *:not(.chroma) {
@@ -398,7 +374,7 @@ code:not([class^=language]) {
   padding: 3px 0;
   border-radius: 4px;
   @include themify($codeblock) {
-    color: themed('content-code-in-pre-color');
+    color: themed('content-code-color');
   }
 }
 
@@ -425,14 +401,15 @@ pre:not(.chroma) {
     left: 0;
     padding: 2px 7px;
     width: 100%;
+    height: 20px;
     z-index: z('toc'); 
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
     content: '';
 
     @include themify($codeblock) {
-      color: themed('content-pre-header-color');
-      background: themed('content-pre-header-background-color');
+        color: themed('content-pre-header-color');
+        background: themed('content-pre-header-background-color');
     }
   }
 }
@@ -458,7 +435,7 @@ pre:not(.chroma) {
       top: 0;
       right: 0;
       z-index: z('grid');
-      height: 26px;
+      height: 25px;
       width: 100%;
       display: inline-block;
       text-align: right;
@@ -476,18 +453,19 @@ pre:not(.chroma) {
       right: 0;
       z-index: z('clipboard');
       padding: 0.125rem 0.25rem;
-      height: 26px;
+      height: 25px;
       font-family: $title-font;
       font-weight: bold;
       font-size: 0.85rem;
       line-height: 1.5;
       display: inline-block;
+      text-transform: capitalize;
       border-top-left-radius: 0.2rem;
       content: attr(data-lang);
 
       @include themify($themes) {
-        border: 1px solid themed('border-line-color');
-        border-bottom: none;
+        border-top: 1px solid themed('hr-color');
+        border-left: 1px solid themed('hr-color');
       }
 
       @include themify($codeblock) {
@@ -532,7 +510,9 @@ pre:not(.chroma) {
     }
 
     @include themify($codeblock) {
-      border: 1px solid themed('content-pre-border-background-color');
+      td:first-child {
+        border-left: 4px solid themed('content-pre-border-background-color');
+      }
     }
   }
 }

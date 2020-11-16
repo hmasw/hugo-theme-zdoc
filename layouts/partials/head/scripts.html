@@ -8,13 +8,10 @@
 {{ end }}
 {{ end }}
 
-{{ if $.Param "enableSearch" }}
-  {{ $fuse := resources.Get "js/fuse.min.js" | resources.Fingerprint }}
-  <script defer src="{{ $fuse.RelPermalink }}"></script>
-{{ end }}
-
 {{ $enquire := resources.Get "js/enquire.min.js" | resources.Fingerprint }}
 <script src="{{ $enquire.RelPermalink }}"></script>
+{{ $fuse := resources.Get "js/fuse.min.js" | resources.Fingerprint }}
+<script defer src="{{ $fuse.RelPermalink }}"></script>
 {{ $lazysizes := resources.Get "js/lazysizes.min.js" | resources.Fingerprint }}
 <script defer src="{{ $lazysizes.RelPermalink }}"></script>
 {{ $getParents := resources.Get "js/helper/getParents.js" | resources.Minify | resources.Fingerprint }}
@@ -25,22 +22,17 @@
 <script>
   "use strict";
 
+  {{ $languagedir := ($.Param "languagedir" | default "ltr") }}
+  var languagedir = JSON.parse({{ $languagedir | jsonify }});
+
   window.onload = function() {
-    {{ $languagedir := ($.Param "languagedir" | default "ltr") }}
-    var languagedir = JSON.parse({{ $languagedir | jsonify }});
-    {{ $baseurl := $.Site.BaseURL }}
-    var baseurl = JSON.parse({{ $baseurl | jsonify }});
-    {{ $permalink := .Permalink }}
-    var permalink = JSON.parse({{ $permalink | jsonify }});
 
     // ==================== toc visibility ========================
     var toggleSidebarElem = document.getElementById("toggle-sidebar");
-    var toggleMenuElem = document.getElementById("toggle-menu");
     var tocBodyElem = document.querySelector('.toc__body');
     var tocLabelElem = document.querySelector('.toc__label');
     var listMainElem = document.getElementById('list-main');
     var listSideElem = document.getElementById('list-side');
-    var singleMenuElem = document.getElementById('single-menu');
     var sliderIcons = document.querySelectorAll('.slider__icon');
 
     toggleSidebarElem ?
@@ -86,40 +78,7 @@
           });
         }
       }) : null;
-
-    toggleMenuElem ?
-      toggleMenuElem.addEventListener('change', function (e) {
-        if (e.target.checked) {
-          if (listMainElem && singleMenuElem) {
-            listMainElem.className = 'm';
-            singleMenuElem.className = 'l';
-          }
-
-          sliderIcons && sliderIcons.forEach(function (elem) {
-            if (elem.classList.contains('hide')) {
-              elem.classList.remove('hide');
-            } else {
-              elem.classList.add('hide');
-            }
-          });
-
-        } else {
-          if (listMainElem && singleMenuElem) {
-            listMainElem.className = 'lm';
-            singleMenuElem.className = 'hide';
-          }
-
-          sliderIcons && sliderIcons.forEach(function (elem) {
-            if (elem.classList.contains('hide')) {
-              elem.classList.remove('hide');
-            } else {
-              elem.classList.add('hide');
-            }
-          });
-        }
-      }) : null;
     // ============================================================
-
 
     // ===================== navbar collapse ======================
     var navCollapseBtn = document.getElementById('navCollapseBtn');
@@ -160,95 +119,26 @@
     }
     // ============================================================
 
-
-
-    // ============================ tab ============================
-    document.querySelectorAll('.tab') ? 
-    document.querySelectorAll('.tab').forEach(function(elem, idx) {
-      var containerId = elem.getAttribute('id');
-      var containerElem = elem;
-      var tabLinks = elem.querySelectorAll('.tab__link');
-      var tabContents = elem.querySelectorAll('.tab__content');
-      var ids = [];
-
-      tabLinks && tabLinks.length > 0 ?
-      tabLinks.forEach(function(link, index, self) {
-        link.onclick = function(e) {
-          for (var i = 0; i < self.length; i++) {
-            if (index === parseInt(i, 10)) {
-              if (!self[i].classList.contains('active')) {
-                self[i].classList.add('active');
-                tabContents[i].style.display = 'block';
-              }
-            } else {
-              self[i].classList.remove('active');
-              tabContents[i].style.display = 'none';
-            }
-          }
-        }
-      }) : null;
-    }) : null;
-    // =============================================================
-
-
-    // ========================== codetab ==========================
-    document.querySelectorAll('.codetab') ? 
-    document.querySelectorAll('.codetab').forEach(function(elem, idx) {
-      var containerId = elem.getAttribute('id');
-      var containerElem = elem;
-      var codetabLinks = elem.querySelectorAll('.codetab__link');
-      var codetabContents = elem.querySelectorAll('.codetab__content');
-      var ids = [];
-
-      codetabLinks && codetabLinks.length > 0 ?
-      codetabLinks.forEach(function(link, index, self) {
-        link.onclick = function(e) {
-          for (var i = 0; i < self.length; i++) {
-            if (index === parseInt(i, 10)) {
-              if (!self[i].classList.contains('active')) {
-                self[i].classList.add('active');
-                codetabContents[i].style.display = 'block';
-              }
-            } else {
-              self[i].classList.remove('active');
-              codetabContents[i].style.display = 'none';
-            }
-          }
-        }
-      }) : null;
-    }) : null;
-    // =============================================================
-
     
     // ======================= toggle theme =======================
-    {{ $enableDarkMode := ($.Param "enableDarkMode") }}
-    var enableDarkMode = JSON.parse({{ $enableDarkMode | jsonify }});
     var root = document.getElementById('root');
     var toggleToLightBtn = document.getElementById('toggleToLight');
     var toggleToDarkBtn = document.getElementById('toggleToDark');
 
-    if (!enableDarkMode) {
-      root.className = 'theme__light';
-      localStorage.setItem('theme', 'light');
-    }
-    
-    if (toggleToDarkBtn) {
-      toggleToDarkBtn.onclick = function (e) {
-        root.className = 'theme__dark';
-        localStorage.setItem('theme', 'dark');
-        toggleToLightBtn.className = 'navbar__icons--icon';
-        toggleToDarkBtn.className = 'hide';
-      }
+    toggleToDark.onclick = function(e) {
+      root.className = 'theme__dark';
+      localStorage.setItem('theme', 'dark');
+      toggleToLightBtn.className = 'navbar__icons--icon';
+      toggleToDarkBtn.className = 'hide';
     }
 
-    if (toggleToLightBtn) {
-      toggleToLightBtn.onclick = function (e) {
-        root.className = 'theme__light';
-        localStorage.setItem('theme', 'light');
-        toggleToLightBtn.className = 'hide';
-        toggleToDarkBtn.className = 'navbar__icons--icon';
-      }
+    toggleToLight.onclick = function (e) {
+      root.className = 'theme__light';
+      localStorage.setItem('theme', 'light');
+      toggleToLightBtn.className = 'hide';
+      toggleToDarkBtn.className = 'navbar__icons--icon';
     }
+
 
     // =================== section menu collapse ==================
     document.querySelectorAll('.menu__list').forEach(function(elem) {
@@ -267,11 +157,13 @@
 
         var parent = elem.parentNode;
         while (parent.classList.contains('menu__list') && parent.classList.contains('active')) {
+          console.log('parent');
           parent.style.maxHeight = 100 * parent.children.length + "px";
           parent = parent.parentNode;
         }
 
         if (content.style.maxHeight) {
+          console.log('null');
           content.style.maxHeight = null;
           content.classList.remove('active');
           menuTitleIcon.classList.add('right');
@@ -282,6 +174,7 @@
             menuTitleIcon.classList.remove('down');
           }
         } else {
+          console.log('scrollHeight');
           content.style.maxHeight = content.scrollHeight + "px";
           content.classList.add('active');
           menuTitleIcon.classList.remove('right');
@@ -563,8 +456,8 @@
 
 
   // ========================== search ==========================
-    {{ $langprefix := $.Site.LanguagePrefix }}
-    var langprefix = JSON.parse({{ $langprefix | jsonify }});
+    {{ $searchURL:= ("/" | absLangURL) }}
+    var searchURL = JSON.parse({{ $searchURL | jsonify }});
     var searchResults = null;
     var searchMenu = null;
     var searchText = null;
@@ -579,7 +472,7 @@
     if (enableSearch) {
       (function initFuse() {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', baseurl + langprefix + "/index.json");
+        xhr.open('GET', searchURL + "index.json");
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.onload = function () {
           if (xhr.status === 200) {
@@ -939,6 +832,7 @@
       var dropdownItems = searchResultsContainer.querySelectorAll('.dd-item');
       dropdownItems ? dropdownItems.forEach(function (item) {
         item.addEventListener('mousedown', function (e) {
+          console.log('mousedown');
           e.target.click();
         });
       }) : null;
@@ -974,6 +868,7 @@
       var dropdownItems = searchResultsContainer.querySelectorAll('.dd-item');
       dropdownItems ? dropdownItems.forEach(function (item) {
         item.addEventListener('mousedown', function (e) {
+          console.log('mousedown');
           e.target.click();
         });
       }) : null;
@@ -1060,6 +955,7 @@
       var dropdownItems = searchResultsContainer.querySelectorAll('.dd-item');
       dropdownItems ? dropdownItems.forEach(function (item) {
         item.addEventListener('mousedown', function (e) {
+          console.log('mousedown');
           e.target.click();
         });
       }) : null;

@@ -19,6 +19,7 @@
     font-size: 1rem;
     margin: 0.65rem 0;
     padding-bottom: 0.5rem;
+    text-transform: capitalize;
 
     @include themify($themes) {
       color: themed('toc-label-color');
@@ -39,19 +40,23 @@
     margin: 0.25rem 0;
 
     &[data-depth="1"] {
+      font-size: 0.925rem;
       margin-left: 1.25rem;
     }
 
     &[data-depth="2"] {
-      margin-left: 2rem;
+      font-size: 0.925rem;
+      margin-left: 2.5rem;
     }
 
     &[data-depth="3"] {
-      margin-left: 2.75rem;
+      font-size: 0.925rem;
+      margin-left: 3.75rem;
     }
 
     &[data-depth="4"] {
-      margin-left: 3.5rem;
+      font-size: 0.925rem;
+      margin-left: 5rem;
     }
 
     @include no-select;
@@ -73,26 +78,30 @@
     &--collapse {
       cursor: pointer;
       word-break: break-word;
-      font-size: 0.925rem;
+      font-size: 16px;
       height: $menu-title-height;
       margin: 0.25rem 0;
 
       &[data-depth="1"] {
+        font-size: 0.925rem;
         margin-left: 1.25rem;
       }
 
       &[data-depth="2"] {
-        margin-left: 2rem;
+        font-size: 0.925rem;
+        margin-left: 2.5rem;
       }
 
       &[data-depth="3"] {
-        margin-left: 2.75rem;
+        font-size: 0.925rem;
+        margin-left: 3.75rem;
       }
 
       &[data-depth="4"] {
-        margin-left: 3.5rem;
+        font-size: 0.925rem;
+        margin-left: 5rem;
       }
-      
+
       @include no-select;
       @include flexbox();
       @include align-items(center);
@@ -114,10 +123,6 @@
             @include translateX(0.125rem);
           }
         }
-      }
-
-      & > span {
-        @include truncate(150px);
       }
     }
 
@@ -164,36 +169,10 @@
     @include transition();
 
     li {
-      margin: 0.75rem 0 0.75rem 1.25rem;
-
-      @include truncate(170px);
+      margin-left: 1.25rem;
 
       &.active {
         font-weight: bold;
-      }
-
-      a {
-        display: inline;
-      }
-    }
-
-    li.menu__title--collapse {
-      margin: 0.25rem 0 0.25rem 1.25rem;
-
-      &[data-depth="1"] {
-        margin-left: 1.25rem;
-      }
-
-      &[data-depth="2"] {
-        margin-left: 2rem;
-      }
-
-      &[data-depth="3"] {
-        margin-left: 2.75rem;
-      }
-
-      &[data-depth="4"] {
-        margin-left: 3.5rem;
       }
     }
   }
